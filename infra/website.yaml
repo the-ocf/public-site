@@ -1,0 +1,51 @@
+Resources:
+  websitebucketB3E12673:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: www.openconstructfoundation.org
+      WebsiteConfiguration:
+        ErrorDocument: index.html
+        IndexDocument: index.html
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: InfraStack/website-bucket/Resource
+  redirectbucket070F6216:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: openconstructfoundation.org
+      WebsiteConfiguration:
+        RedirectAllRequestsTo:
+          HostName: www.openconstructfoundation.org
+          Protocol: http
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: InfraStack/redirect-bucket/Resource
+  websitednsroot8D92ABF2:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: "@.openconstructfoundation.org."
+      Type: A
+      AliasTarget:
+        DNSName: s3-website-us-east-1.amazonaws.com
+        HostedZoneId: Z3AQBSTGFYJSTF
+      HostedZoneId: Z5F4VBVHHUZME
+    Metadata:
+      aws:cdk:path: InfraStack/website-dns-root/Resource
+  websitedns16A3FD9D:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: www.openconstructfoundation.org.
+      Type: A
+      AliasTarget:
+        DNSName: s3-website-us-east-1.amazonaws.com
+        HostedZoneId: Z3AQBSTGFYJSTF
+      HostedZoneId: Z5F4VBVHHUZME
+    Metadata:
+      aws:cdk:path: InfraStack/website-dns/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.13.1,@aws-cdk/aws-events=1.13.1,@aws-cdk/aws-iam=1.13.1,@aws-cdk/aws-kms=1.13.1,@aws-cdk/aws-route53=1.13.1,@aws-cdk/aws-route53-targets=1.13.1,@aws-cdk/aws-s3=1.13.1,@aws-cdk/core=1.13.1,@aws-cdk/cx-api=1.13.1,@aws-cdk/region-info=1.13.1,jsii-runtime=node.js/v10.16.0
+
