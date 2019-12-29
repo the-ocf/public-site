@@ -15,6 +15,7 @@ export class InfraStack extends Stack {
     this.setupRoute53();
   }
   setupBucket() {
+    
     this.websiteBucket = new Bucket(this, 'website-bucket', {
       bucketName: 'www.openconstructfoundation.org',
       websiteIndexDocument: 'index.html',
