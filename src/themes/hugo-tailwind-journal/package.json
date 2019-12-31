@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "watch": "cross-env NODE_ENV=development postcss scss/theme.scss -o static/css/theme.css --watch",
+    "build": "cross-env NODE_ENV=production postcss scss/theme.scss -o static/css/theme.css"
+  },
+  "dependencies": {
+    "autoprefixer": "^9.5.1",
+    "tailwindcss": "^1.0"
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^1.2.0",
+    "concurrently": "^4.1.0",
+    "cross-env": "^5.2.0",
+    "cssnano": "^4.1.10",
+    "postcss-cli": "^6.1.2"
+  }
+}

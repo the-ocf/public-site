@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="{{ .Site.Params.LanguageCode }}">
+
+<head>
+    <meta charset="utf-8">
+    {{ hugo.Generator }}
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title"
+          content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}">
+    <meta name="twitter:description"
+          content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Summary | plainify }}{{ end }}">
+    <meta name="twitter:site" content="{{ .Site.BaseURL }}">
+    <meta name="twitter:creator" content="{{ .Params.Author }}">
+    <meta name="twitter:image" content="{{ .Site.Params.Avatar | absURL }}">
+
+    <!-- Open-Graph Data -->
+    <meta property="og:locale" content="{{ .Site.Params.LanguageCode }}">
+    <meta property="og:type" content="{{ if .IsHome }}website{{ else }}article{{ end }}">
+    <meta property="og:title"
+          content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}">
+    <meta property="og:description"
+          content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Summary | plainify }}{{ end }}">
+    <meta property="og:url" content="{{ .Permalink }}">
+    <meta property="og:site_name" content="{{ .Site.Title }}">
+    <meta property="og:image" content="{{ .Site.Params.Avatar | absURL }}">
+
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+
+    <meta name="author" content="{{ .Site.Params.Author }}">
+    <meta name="description"
+          content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Summary | plainify }}{{ end }}">
+
+    <!-- RSS -->
+    {{ with .OutputFormats.Get "RSS" }}
+    <link rel="alternate" href="{{ .RelPermalink | absURL }}" type="application/rss+xml" title="{{ $.Site.Title }}">
+    {{ end }}
+
+    <!-- Translations -->
+    {{ if .IsTranslated }}
+    {{ range .Translations }}
+    <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" title="{{ .Site.Title }}">
+    {{ end }}
+    {{ end }}
+
+    <!-- Stylesheets -->
+    <!-- @formatter:off -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Arvo:400,700">
+    <link rel="stylesheet" href="{{ "css/theme.css" | absURL }}">
+    <link rel="stylesheet" href="{{ "css/chroma.dracula.css" | absURL }}">
+    <!-- @formatter:on -->
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo"
+          rel="stylesheet">
+</head>
+<body class="bg-gray-100 border-t-4 border-gray-400 antialiased h-screen flex flex-col">
+<header class="mb-6 pb-1 w-full bg-gray-300">
+    <!-- All the pages must have a heading block, defaults to a link for the home page and a title. -->
+    <ul class="mb-3 ml-0 flex flex-row justify-between list-none">
+        <li class="mx-3 items-start">
+            <a href="/" class="no-underline">OCF</a>
+        </li>
+        <li class="mx-3">
+            <a href="/who" class="no-underline mx-3">Who We Are</a>
+            <a href="/guides" class="no-underline mx-3">Guides</a>
+            <a href="/examples" class="no-underline mx-3">Examples</a>
+        </li>
+        <li>
+            <a href="https://github.com/construct-catalog/public-site" target="_blank" class="mx-3">Github</a>
+        </li>
+    </ul>
+
+    <!-- If the blog has translation, they shoul be displayed here. -->
+    {{ if .IsTranslated }}
+    <nav>
+        {{ range $i, $lang := .Translations }}
+        {{ if $i }}/{{ end }}
+        <a href="{{ .Permalink }}">{{ $lang.Language.LanguageName }}</a>
+        {{ end}}
+    </nav>
+    {{ end }}
+</header>
+
+<section class="flex-grow">
+    {{ block "content" . }}{{ end }}
+</section>
+
+<footer class="flex-row flex justify-center">
+    <p>
+        &copy; {{ now.Format "2006"}} The Open Construct Foundation
+    </p>
+</footer>
+
+{{ template "_internal/google_analytics.html" . }}
+</body>
+</html>
