@@ -34,12 +34,12 @@ article > h2 {
     @apply text-2xl my-8 font-bold text-black;
 }
 
-a {
-    @apply text-black;
-}
-
 p {
     @apply font-serif;
+}
+
+a {
+    @apply text-blue-800 font-bold;
 }
 
 /* purgecss ignore */

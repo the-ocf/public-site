@@ -11475,12 +11475,13 @@ article > h2 {
   color: #000;
 }
 
-a {
-  color: #000;
-}
-
 p {
   font-family: Nanum Myeongjo;
+}
+
+a {
+  color: #2c5282;
+  font-weight: 700;
 }
 
 /* purgecss ignore */
