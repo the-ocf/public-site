@@ -42,6 +42,7 @@ a {
     @apply text-blue-800 font-bold;
 }
 
+
 /* purgecss ignore */
 pre.chroma {
     @apply p-4 overflow-x-auto font-mono text-lg;
@@ -53,3 +54,6 @@ pre.chroma {
         @apply -mx-12;
     }
 }
+
+
+

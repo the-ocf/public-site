@@ -1,10 +1,11 @@
 {
   "scripts": {
-    "watch": "cross-env NODE_ENV=development postcss scss/theme.scss -o static/css/theme.css --watch",
-    "build": "cross-env NODE_ENV=production postcss scss/theme.scss -o static/css/theme.css"
+    "watch": "cross-env NODE_ENV=development postcss scss/*.css --dir static/css/ --ext css --watch",
+    "build": "cross-env NODE_ENV=production postcss scss/*.css --dir static/css/ --ext css"
   },
   "dependencies": {
     "autoprefixer": "^9.5.1",
+    "postcss-import": "^12.0.1",
     "tailwindcss": "^1.0"
   },
   "devDependencies": {
