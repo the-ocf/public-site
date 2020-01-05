@@ -14,8 +14,7 @@ To install the hugo cli, refer to [these](https://gohugo.io/getting-started/inst
 To run the hugo server:
 
 ```shell script
-$ cd src
-$ hugo server -w
+$ hugo -s src server -w
 ```
 
 #### Theme changes
