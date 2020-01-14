@@ -47,6 +47,10 @@ a {
 pre.chroma {
     @apply p-4 overflow-x-auto font-mono text-lg;
 }
+pre {
+    @apply bg-gray-400;
+    overflow-x: scroll;
+}
 
 @screen md {
     /* purgecss ignore */

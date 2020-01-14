@@ -11493,6 +11493,11 @@ pre.chroma {
   font-size: 1.125rem;
 }
 
+pre {
+  background-color: #cbd5e0;
+  overflow-x: scroll;
+}
+
 @media (min-width: 768px) {
   /* purgecss ignore */
 

@@ -1,0 +1,318 @@
+---
+layout: blog.hbs
+title: 'How to Create CDK Constructs'
+description: "Creating reusable CDK Constructs is easier than you may think. Thanks to Github actions you have build and distribute a custom CDK Construct in under an hour."
+date: 2020-01-11
+tags: cdk, construct
+---
+<style>
+
+</style>
+<section class="nice-block">
+
+
+    <p>The AWS <a href="https://aws.amazon.com/cdk/" target="_blank">Cloud Development Kit</a> offers a powerful and
+        flexible way to manage your AWS infrastructure. While the CDK ships with a lot of existing constructs to
+        leverage, there are reasons you will need to create your own. Perhaps you want to abstract common infrastructure
+        behind something that's easily reusable by your DevOps teams. Or maybe you need to enforce business standards.
+        Either way, learning how to make a reusable construct provides huge recurring value over the life of your
+        Infrastructure as Code.</p>
+    <p>I'm not going to cover much about what makes a good reusable construct (that's coming later). Instead, the goal
+        is to show you the
+        technical setup of how to get it done. First is creating a JSII module that is our construct, and the second is
+        getting it built and published. In this case I'm going to use Github as my git repository and GitHub Actions for
+        automatic publishing, leveraging <a href="https://github.com/marketplace/actions/jsii-publish" target="_blank">Daniel
+            Schroeder's excellent Docker container</a>. For simplicity the construct will be a simple S3
+        Bucket with encryption enforced.</p>
+    <p>Finally, I'll talk a little bit about the CDK Construct Catalog, and how you can automatically publish to it.</p>
+</section>
+
+<section class="nice-block">
+    <h2>Create a JSII-based construct</h2>
+    <p>The <a href="https://github.com/aws/jsii" target="_blank">JSII</a> is the library that underpins the AWS CDK and
+        makes it possible to write a CDK construct once in TypeScript/Javascript and then compile and distribute it for
+        other languages like Python, Java, and C#.
+    </p>
+    <p>Start by creating a new project, following the <a href="https://github.com/aws/jsii" target="_blank"> JSII
+        docs</a>. Take your time to read the <a href="https://github.com/aws/jsii/blob/master/docs/configuration.md"
+                                                target="_blank"> Configuration section</a> as
+        there is a lot of useful information, some of which is absolutely required for proper JSII compilation and
+        publishing.</p>
+
+    <p>Once done you should have the basic shell of a module. However, the JSII does not bootstrap any testing
+        framework, so let's do that now.</p>
+    <pre>
+         <code class="shell">
+ $ npm i --save-dev @types/jest @types/node ts-jest
+         </code>
+    </pre>
+    <p>Let's also go ahead and fill out the <strong>scripts</strong> section of the <i>package.json</i> by adding
+        the test/watch scripts:
+    </p>
+    <pre>
+        <code class="json">
+"scripts": {
+    "build": "jsii",
+    "build:watch": "jsii -w",
+    "package": "jsii-pacmak",
+    "test": "tsc && jest",
+    "watch": "tsc -w"
+},
+        </code>
+    </pre>
+    <p>Also, create a <strong>jest.config.js</strong> file in the base dir with the following contents:</p>
+    <pre>
+        <code class="js">
+module.exports = {
+    "roots": [
+        "<rootDir>/"
+    ],
+    testMatch: ['**/*.test.ts'],
+    "transform": {
+        "^.+\\.tsx?$": "ts-jest"
+    },
+};
+
+        </code>
+    </pre>
+    <p>Now we can run some basic Jest tests around our construct with a simple command: </p>
+    <pre>
+        <code class="shell">
+$ npm run test
+        </code>
+    </pre>
+    <p>But, we don't have any tests yet, so nothing happens.</p>
+    <p>Next we're going to write some unit tests and create a construct. I'm not going to go into details here but
+        you should at least see some code. In this case the construct is just going to wrap an S3 Bucket and ensure that
+        it always has encryption enabled.</p>
+    <p>Don't forget to install some dependencies first, both for the unit testing and for the construct itself:</p>
+    <pre>
+        <code class="shell">
+$ npm i -s @aws-cdk/core @aws-cdk/aws-s3
+$ npm i --save-dev @aws-cdk/assert
+        </code>
+    </pre>
+    <p>Here's the test and code:</p>
+    <h2>The test: <a href="https://github.com/mbonig/secure-bucket/blob/master/lib/index.test.ts" target="_blank">lib/index.test.ts</a>
+    </h2>
+    <pre>
+        <code class="typescript">
+import {SecureBucket} from "../lib/index";
+import {App, Stack} from "@aws-cdk/core";
+import '@aws-cdk/assert/jest';
+import {BucketEncryption} from "@aws-cdk/aws-s3";
+
+test('Has one encrypted Bucket', () => {
+    const mockApp = new App();
+    const stack = new Stack(mockApp, 'testing-stack');
+
+    new SecureBucket(stack, 'testing', {});
+
+    expect(stack).toHaveResource("AWS::S3::Bucket", {
+        "BucketEncryption": {
+            "ServerSideEncryptionConfiguration": [
+                {
+                    "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "aws:kms"
+                    }
+                }
+            ]
+        }
+    });
+
+});
+
+test('Does not allow for unencrypted buckets', () => {
+    const mockApp = new App();
+    const stack = new Stack(mockApp, 'testing-stack');
+
+    new SecureBucket(stack, 'testing', {encryption: BucketEncryption.UNENCRYPTED});
+
+    expect(stack).toHaveResource("AWS::S3::Bucket", {
+        "BucketEncryption": {
+            "ServerSideEncryptionConfiguration": [
+                {
+                    "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "aws:kms"
+                    }
+                }
+            ]
+        }
+    });
+});
+
+test('Allows override of default encryption', () => {
+    const mockApp = new App();
+    const stack = new Stack(mockApp, 'testing-stack');
+
+    new SecureBucket(stack, 'testing', {encryption: BucketEncryption.S3_MANAGED});
+
+    expect(stack).toHaveResource("AWS::S3::Bucket", {
+        "BucketEncryption": {
+            "ServerSideEncryptionConfiguration": [
+                {
+                    "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                    }
+                }
+            ]
+        }
+    });
+});
+
+        </code>
+    </pre>
+    <h2>The code: <a href="https://github.com/mbonig/secure-bucket/blob/master/lib/index.ts" target="_blank">lib/index.ts</a>
+    </h2>
+    <pre>
+        <code class="typescript">
+import {Construct} from "@aws-cdk/core";
+import {Bucket, BucketEncryption, BucketProps} from '@aws-cdk/aws-s3'
+
+export class SecureBucket extends Construct {
+
+    constructor(scope: Construct, id: string, props?: BucketProps) {
+        super(scope, id);
+
+        let newProps: BucketProps = {...props};
+        if (!props || props?.encryption === undefined || props?.encryption === BucketEncryption.UNENCRYPTED) {
+            // @ts-ignore TS2540
+            newProps.encryption = BucketEncryption.KMS_MANAGED;
+        }
+        new Bucket(this, `${id}-bucket`, newProps);
+    }
+}
+        </code>
+    </pre>
+
+    <p>Once that's setup you can run your unit tests:</p>
+    <pre>
+        <code class="shell">
+$ npm run test
+        </code>
+    </pre>
+    <p>And we get some test results!</p>
+    <pre>
+        <code class="shell">
+> secure-bucket@1.0.0 test /home/mbonig/projects/construct-blog/secure-bucket
+> jest
+
+ PASS  lib/index.test.ts
+  ✓ Has one encrypted Bucket (59ms)
+  ✓ Does not allow for unencrypted buckets (14ms)
+  ✓ Allows override of default encryption (10ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        1.175s
+Ran all test suites.
+
+        </code>
+    </pre>
+
+    <p>Now we can build and package the JSII module:</p>
+    <pre>
+        <code class="shell">
+$ npm run build
+
+> secure-bucket@1.0.0 build /home/mbonig/projects/construct-blog/secure-bucket
+> jsii
+
+$ npm run package
+
+> secure-bucket@1.0.0 package /home/mbonig/projects/construct-blog/secure-bucket
+> jsii-pacmak
+        </code>
+    </pre>
+
+    <p>Now if you're like me, you're likely to get some errors during the first time you run <i>build</i> and
+        <i>package</i> because you need to have the <strong>dotnot</strong> cli, the <strong>mvn</strong> cli and the
+        <strong>jdk</strong> installed, and you'll get a warning about <strong>twine</strong> so install that too.
+        Google
+        for your particular system's favorite package manager for details on getting them installed.
+        I run a debian-based distro so it's mostly:</p>
+    <pre>
+        <code class="shell">
+$ pip3 install twine --user
+$ sudo apt install dotnet maven openjdk
+        </code>
+    </pre>
+
+    <p>Keep running your <i>build</i> and <i>package</i> until all errors are gone. The result should just be a new
+        <strong>.jsii</strong> file in the local directory and the
+        <strong>dist/</strong> directories getting filled out for our major package managers.</p>
+    <pre>
+        <code class="shell">
+$ ls -al dist
+Permissions Size User   Date Modified Git Name
+drwxr-xr-x     - mbonig 11 Jan  9:42   -- dist/
+drwxr-xr-x     - mbonig 11 Jan 15:57   -- ├── dotnet/
+drwxr-xr-x     - mbonig 11 Jan  9:47   -- ├── java/
+drwxr-xr-x     - mbonig 11 Jan 15:57   -- ├── js/
+drwxr-xr-x     - mbonig 11 Jan  9:41   -- └── python/
+        </code>
+    </pre>
+
+    <p>Huzzah! We now have a working JSII module that's unit tested and deliverable to the various
+        package managers. Now we just have to deliver them! But first, go ahead and push your repository to Github and
+        update references in your <strong>package.json</strong> accordingly.</p>
+    <p>By the way, all of this code is available <a href="https://github.com/mbonig/secure-bucket"
+                                                    target="_blank">here</a>.</p>
+
+</section>
+<section class="nice-block">
+    <h2>Github Actions</h2>
+    <p>GitHub Actions is a very convienent and cheap automation pipeline. In our case, we're going to use
+        <a href="https://github.com/marketplace/actions/jsii-publish" target="_blank">Daniel
+            Schroeder's Github Action</a> to build and deploy our new JSII construct to NPM, NuGet, PyPi and
+        Github (Maven). </p>
+
+    <p>Following the instructions on the linked page is pretty straight forward. You'll have to
+        create accounts at all the places you want to publish and generate Access Tokens. Once you have them, <a
+                href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets"
+                target="_blank"> create
+            Secrets</a> in your Github Repository. And you should be all set.
+
+    <p>Go ahead now and create a new Tag/Release in your Github Repository and the Action will begin. Review its
+        progress. You should see it produce log lines like: </p>
+    <pre>
+        <code class="text">
+Building source...
+...
+Building packages...
+...
+📦 Publishing npm package...
+...
+✅ Done
+📦 Publishing PyPI package...
+...
+✅ Done
+📦 Publishing NuGet package...
+...
+✅ Done
+📦 Publishing Maven package...
+...
+✅ Done
+        </code>
+    </pre>
+    <p>Of course, your mileage may vary if you decided not to publish to any of those Package Managers (but why would
+        you do that?).</p>
+</section>
+<section class="nice-block">
+    <h2>The Construct Catalog</h2>
+    <p>In December of 2019 the <a href="https://twitter.com/awscdkio">Construct Catalog</a> was created to index and
+        document all
+        the fantastic CDK constructs that are being created by the community. If you create a JSII-based construct and
+        publish it to NPM with a <strong>keyword</strong> of "cdk", like so:</p>
+    <pre>
+        <code class="json">
+  "keywords": [
+    "cdk"
+  ]
+        </code>
+    </pre>
+    <p>Then your construct will automatically be picked up and cataloged by the Construct Catalog!</p>
+
+    <h3>Happy Constructing!</h3>
+</section>
