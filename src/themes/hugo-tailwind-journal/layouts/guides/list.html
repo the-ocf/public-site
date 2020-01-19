@@ -1,4 +1,6 @@
 {{ define "content" }}
+
+<p>The following are some guides to help you on your CDK development.</p>
 <section class="mb-24">
     {{ range where site.RegularPages "Section" "guides" -}}
         {{ partial "examples.html" . }}
