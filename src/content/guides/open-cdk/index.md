@@ -2,6 +2,7 @@
 layout: blog.hbs
 title: 'Open CDK Guide'
 description: "This guide is an opinionated set of tips and best practices for working with the AWS Cloud Development Kit"
+author: 'Kevin S Lin @kevins8'
 date: 2020-01-18
 tags: cdk, construct
 ---

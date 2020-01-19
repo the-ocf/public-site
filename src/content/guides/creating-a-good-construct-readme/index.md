@@ -1,5 +1,6 @@
 ---
 title: "Create a good CDK construct README"
+description: Having an informative and detailed README with your construct greatly helps adoption. Here are some tips.
 ---
 
 ## Creating a good CDK Construct README
@@ -12,9 +13,11 @@ Leveraging a CDK module should be as easy as possible for the community. We beli
     
     Good Example:
     
-    ""
+    "This construct will create an guaranteed-secured S3 bucket with encryption enabled by default and prevents disabling all encryption. Additionally the public blocks will be enforced and can't be disabled. This way you know you're always creating private and secured buckets."
     
     Bad Example:
+    
+    "An s3 bucket wrapper."
 
 1. Show an example usage of the Construct
     1. Include reasonable example values

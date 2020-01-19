@@ -1,7 +1,16 @@
 {{ define "content" }}
-<p>There is an official list of CDK examples for AWS that you can get <a
-        href="https://github.com/aws-samples/aws-cdk-examples">here</a>. More examples will come later. If you'd like to
-    contribute, please open an Issue on the Github page <a href="https://github.com/Open-Construct-Foundation/public-site/issues">here</a>.</p>
+<p class="text-2xl">
+    AWS maintains an official list of CDK Examples here:
+
+    <a href="https://github.com/aws-samples/aws-cdk-examples">https://github.com/aws-samples/aws-cdk-examples</a>
+
+</p>
+<p>
+    More examples will come later. If you'd like to
+    contribute, please open an Issue on the Github page <a
+        href="https://github.com/Open-Construct-Foundation/public-site/issues">here</a>.
+</p>
+
 <section class="mb-24">
     {{ range where site.RegularPages "Section" "examples" -}}
     {{ partial "examples.html" . }}
