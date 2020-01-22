@@ -26,6 +26,7 @@ tags: cdk, construct
             Schroeder's excellent Docker container</a>. For simplicity the construct will be a simple S3
         Bucket with encryption enforced.</p>
     <p>Finally, I'll talk a little bit about the CDK Construct Catalog, and how you can automatically publish to it.</p>
+    <p> All code for this guide is available publically on <a href="https://github.com/mbonig/secure-bucket">github</a>. </p>
 </section>
 
 <section class="nice-block">
@@ -314,6 +315,7 @@ Building packages...
         </code>
     </pre>
     <p>Then your construct will automatically be picked up and cataloged by the Construct Catalog!</p>
+    <p> Note that as of this writing (2020-01-21), constructs can take some time to publish (we've observed latencies as high as 40 minutes) </p>
 
     <h3>Happy Constructing!</h3>
 </section>
