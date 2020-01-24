@@ -7,6 +7,7 @@ theme = "hugo-tailwind-journal"
 unsafe= true
 
 [Params]
-    tagline = ""
+    tagline = "Making the CDK community better!"
+    description = "The Open Construct Foundation aims to create a healthy and productive community around the AWS Cloud Development Kit"
 
 
