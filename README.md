@@ -30,3 +30,7 @@ $ npm run watch
 ## Contribute
 
 This website is supported by the community. If you'd like to contribute, please open a [PR](https://github.com/Open-Construct-Foundation/public-site/pulls).
+
+## Donate   
+
+The OCF website is pretty cheap to run, but if you'd like to donate to help future endeavors and cover the minimal costs, please reach out to [@mattbonig](https://twitter.com/mattbonig) on Twitter.
