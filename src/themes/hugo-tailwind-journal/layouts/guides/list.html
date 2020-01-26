@@ -1,9 +1,15 @@
 {{ define "content" }}
 
-<p class="text-2xl mb-20">The following are some guides to help you on your CDK development.</p>
-<section class="mb-24 flex-row">
+<p class="text-2xl mb-20 p-8">The following are some guides to help you on your CDK development.</p>
+<section class="mb-24 flex-row p-4">
     {{ range where site.RegularPages "Section" "guides" -}}
         {{ partial "guide.html" . }}
     {{ end }}
 </section>
+
+<section class="mb-24 flex-row p-4">
+    <p>If you'd like to submit a guide, please open a <a href="https://github.com/Open-Construct-Foundation/public-site/pulls">Pull Request on our Github repo</a>.</p>
+</section>
+
+
 {{ end }}
