@@ -11,19 +11,22 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.13.1",
-    "@types/jest": "^24.0.18",
+    "@aws-cdk/assert": "^1.22.0",
+    "@types/jest": "^24.9.1",
+    "aws-cdk": "^1.22.0",
     "jest": "^24.9.0",
-    "ts-jest": "^24.0.2",
-    "aws-cdk": "^1.13.1",
-    "ts-node": "^8.1.0",
-    "typescript": "~3.6.2"
+    "ts-jest": "^24.3.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.6.5"
   },
   "dependencies": {
-    "@aws-cdk/aws-route53": "^1.13.1",
-    "@aws-cdk/aws-route53-targets": "^1.13.1",
-    "@aws-cdk/aws-s3": "^1.13.1",
-    "@aws-cdk/core": "^1.13.1",
-    "source-map-support": "^0.5.9"
+    "@aws-cdk/aws-cloudfront": "^1.22.0",
+    "@aws-cdk/aws-codepipeline": "^1.22.0",
+    "@aws-cdk/aws-codepipeline-actions": "^1.22.0",
+    "@aws-cdk/aws-route53": "^1.22.0",
+    "@aws-cdk/aws-route53-targets": "^1.22.0",
+    "@aws-cdk/aws-s3": "^1.22.0",
+    "@aws-cdk/core": "^1.22.0",
+    "source-map-support": "^0.5.16"
   }
 }

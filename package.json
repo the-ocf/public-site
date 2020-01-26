@@ -6,6 +6,7 @@
   "scripts": {
     "build:prod": "hugo -t hugo-tailwind-journal -s src -d ../dist",
     "build": "hugo -b http://localhost:8080/ -t hugo-tailwind-journal -s src -d ../dist",
+    "watch": "hugo serve -s src -w",
     "serve": "http-server dist"
 
   },
