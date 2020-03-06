@@ -11507,6 +11507,11 @@ pre {
   }
 }
 
+.justify-evenly {
+  -webkit-box-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;

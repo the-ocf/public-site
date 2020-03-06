@@ -1,7 +1,7 @@
 {{ define "content" }}
 
 <p class="text-2xl mb-20 p-8">The following are some guides to help you on your CDK development.</p>
-<section class="mb-24 flex-row p-4">
+<section class="mb-24 p-4 flex flex-wrap flex-row justify-evenly">
     {{ range where site.RegularPages "Section" "guides" -}}
         {{ partial "guide.html" . }}
     {{ end }}
