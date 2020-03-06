@@ -38,3 +38,17 @@ test('deploys to s3 bucket with private when cert set', () => {
 ```
 
 Notice in this case I'm doing a `@ts-ignore` to prevent errors regarding the access of private variables.
+
+
+```typescript
+test('Topic was created', () => {
+    const testStack = getStack();
+    const topic: Topic = testStack.node.findChild('notifications') as Topic;
+    should(topic.topicName.startsWith("notifications")).be.true();
+});
+```
+
+Be mindful that you don't want to go too far into the underlying API for the Construct. These are implementation details that might change in future versions which could cause failures in the future.
+
+That being said, this can be a last choice "release valve" for testing aspects of your code that can't be easily tested using other means.
+

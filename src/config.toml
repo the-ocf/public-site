@@ -2,6 +2,7 @@ baseURL = "http://www.openconstructfoundation.org/"
 languageCode = "en-us"
 title = "The Open Construct Foundation"
 theme = "hugo-tailwind-journal"
+googleAnalytics = "UA-157500537-1"
 
 [markup.goldmark.renderer]
 unsafe= true

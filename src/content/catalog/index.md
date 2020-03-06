@@ -11,4 +11,4 @@ Anybody may publish to the CDK Construct Catalog by simply including the keyword
 
 ## Searching the Catalog
 
-The index of all cataloged CDK modules is on Twitter and available through the [awscdkio](https://twitter.com/awscdkio) Twitter handle. 
+The index of all cataloged CDK modules is on Twitter and available through the [awscdkio](https://awscdk.io) Twitter handle. 
