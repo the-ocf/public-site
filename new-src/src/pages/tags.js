@@ -18,7 +18,7 @@ const TagsPage = props => {
   // Create tags list
   const tagsPosts = {};
   posts.forEach(edge => {
-    
+
     const {
       node: {
         frontmatter: { tags }
@@ -60,9 +60,9 @@ const TagsPage = props => {
         {/* --- STYLES --- */}
         <style jsx>{`
           h2 {
-            margin: 0 0 0.5em;
+            margin: 0 0 1.5em;
             color: ${theme.color.neutral.gray.j};
-            
+
           }
           @from-width desktop {
             :global(a:hover) {

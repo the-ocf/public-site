@@ -9,12 +9,12 @@ module.exports = {
 
   /* author */
   authorName: "Matthew Bonig",
-  authorTwitterAccount: "",
+  authorTwitterAccount: "@mattbonig",
   authorGithub: "https://github.com/Open-Construct-Foundation/public-site",
 
   /* header text */
-  headerTitle: "The OCF",
-  headerSubTitle: "",
+  headerTitle: "The Open Construct Foundation",
+  headerSubTitle: "OCF",
 
   /* manifest.json */
   manifestName: "the_ocf",

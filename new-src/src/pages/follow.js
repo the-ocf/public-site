@@ -12,16 +12,16 @@ const FollowPage = props => {
   return (
     <StaticQuery
       query={graphql`
-        query EmailQuery {
+        query TwitterQuery {
           site {
             siteMetadata {
-              emailSubLink
+              twitterSubLink
             }
           }
         }
       `}
       render={ queryResults => {
-        const emailSubLink = queryResults.site.siteMetadata.emailSubLink
+        const twitterSubLink = queryResults.site.siteMetadata.twitterSubLink
         return (
           <React.Fragment>
             <Article theme={theme}>
@@ -37,10 +37,9 @@ const FollowPage = props => {
                 </section>
               </a>
 
-              <a href={emailSubLink} target="_blank">
+              <a href={twitterSubLink} target="_blank">
                 <section className="subContainer">
-                  <span className="subIcon"><FaPaperPlane/></span>
-                  <span className="subText">Email</span>
+                  <span className="subText">Twitter</span>
                 </section>
               </a>
 
@@ -67,13 +66,13 @@ const FollowPage = props => {
                     }
                   }
                 }
-              
+
                 .subText {
                     text-align: right;
                     font-size: 20px;
                     color: ${theme.color.neutral.gray.j};
                 }
-                
+
                 .subIcon {
                     vertical-align: middle;
                     font-size: 40px;

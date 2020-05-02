@@ -16,10 +16,7 @@ const Teaser = props => {
       frontmatter: {
         title,
         tags,
-        author,
-        cover: {
-          children: [{ fluid }]
-        }
+        author
       }
     },
     index
@@ -29,9 +26,6 @@ const Teaser = props => {
     <React.Fragment>
       <li>
         <Link to={slug} key={slug} className="link">
-          <div className="gatsby-image-outer-wrapper">
-            <Picture fluid={fluid} critical={index==0}/>
-          </div>
           <h1>
             {title} <FaArrowRight className="arrow" />
           </h1>
@@ -166,7 +160,7 @@ const Teaser = props => {
             box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.03);
             margin-top: 20px;
             margin-bottom: 20px;
-            
+
             &:first-child {
               margin-top: 0;
             }

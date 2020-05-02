@@ -9,7 +9,7 @@ const blogPostTeaserFields = `
     edges {
         node {
             id
-            excerpt
+            excerpt(pruneLength: 500)
             fields {
                 slug
                 prefix
@@ -18,21 +18,7 @@ const blogPostTeaserFields = `
             frontmatter {
                 title
                 tags
-                cover {
-                    children {
-                        ... on ImageSharp {
-                            fluid(maxWidth: 800, maxHeight: 360, cropFocus: CENTER, quality: 90, traceSVG: { color: "#f9ebd2" }) {
-                                tracedSVG
-                                aspectRatio
-                                src
-                                srcSet
-                                srcWebp
-                                srcSetWebp
-                                sizes
-                            }
-                        }
-                    }
-                }
+
             }
         }
     }

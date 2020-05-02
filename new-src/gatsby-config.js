@@ -52,7 +52,7 @@ module.exports = {
     description: config.siteDescription,
     siteUrl: config.siteUrl,
     contactPostAddress: process.env.CONTACT_POST_ADDRESS || "",
-    emailSubLink: process.env.EMAIL_SUB_LINK || "",
+    twitterSubLink: process.env.TWITTER_SUB_LINK || "https://twitter.com/the_real_ocf",
     algolia: {
       appId: process.env.ALGOLIA_APP_ID || "",
       searchOnlyApiKey: process.env.ALGOLIA_SEARCH_ONLY_API_KEY
@@ -88,7 +88,7 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/${process.env.POSTS_FOLDER || 'mock_posts'}/`,
+        path: `${__dirname}/content/posts/`,
         name: "posts"
       }
     },
@@ -267,7 +267,7 @@ module.exports = {
                 ) {
                   edges {
                     node {
-                      excerpt
+                      excerpt(pruneLength: 500)
                       html
                       fields {
                         slug
@@ -281,7 +281,8 @@ module.exports = {
                 }
               }
             `,
-            output: "/rss.xml"
+            output: "/rss.xml",
+            title: "The OCF"
           }
         ]
       }
