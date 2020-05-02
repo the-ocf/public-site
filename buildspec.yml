@@ -8,7 +8,7 @@
     },
     "build": {
       "commands": [
-        "cd new-src"
+        "cd new-src",
         "npm install",
         "npm run build"
       ]
