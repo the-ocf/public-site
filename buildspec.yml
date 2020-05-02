@@ -1,0 +1,23 @@
+{
+  "version": "0.2",
+  "phases": {
+    "install": {
+      "runtime-versions": {
+        "nodejs": "12"
+      },
+    },
+    "build": {
+      "commands": [
+        "cd new-src"
+        "npm install",
+        "npm run build"
+      ]
+    }
+  },
+  "artifacts": {
+    "files": [
+      "**/*"
+    ],
+    "base-directory": "new-src/public"
+  }
+}
