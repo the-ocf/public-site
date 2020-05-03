@@ -1,4 +1,4 @@
-import {Bucket, BucketEncryption, RedirectProtocol} from '@aws-cdk/aws-s3';
+import {Bucket, BucketEncryption} from '@aws-cdk/aws-s3';
 import {Construct, SecretValue, Stack, StackProps} from '@aws-cdk/core';
 import {HostedZone, RecordSet, RecordTarget, RecordType} from '@aws-cdk/aws-route53';
 
@@ -8,7 +8,6 @@ import {CodeBuildAction, GitHubSourceAction, S3DeployAction} from "@aws-cdk/aws-
 import {BuildSpec, ComputeType, LinuxBuildImage, PipelineProject} from '@aws-cdk/aws-codebuild';
 import {DnsValidatedCertificate} from "@aws-cdk/aws-certificatemanager";
 import {CloudFrontWebDistribution, OriginAccessIdentity, ViewerCertificate} from "@aws-cdk/aws-cloudfront";
-import { PolicyStatement } from '@aws-cdk/aws-iam';
 
 export interface InfraStackProps extends StackProps {
     hostedZoneId: string;
@@ -45,7 +44,7 @@ export class InfraStack extends Stack {
 
         this.websiteBucket = new Bucket(this, 'website-bucket', {
             bucketName: 'www.openconstructfoundation.org',
-            blockPublicAccess:{
+            blockPublicAccess: {
                 blockPublicAcls: true,
                 blockPublicPolicy: true,
                 ignorePublicAcls: true,
@@ -98,20 +97,6 @@ export class InfraStack extends Stack {
             zone: hostedZone,
             target: RecordTarget.fromAlias(new CloudFrontTarget(this.distribution))
         });
-        //
-        // new RecordSet(this, 'website-dns-root', {
-        //     recordType: RecordType.A,
-        //     recordName: '@',
-        //     zone: hostedZone,
-        //     target: RecordTarget.fromAlias(new BucketWebsiteTarget(this.redirectBucket))
-        // });
-        //
-        // new RecordSet(this, 'website-dns', {
-        //     recordType: RecordType.A,
-        //     recordName: 'www',
-        //     zone: hostedZone,
-        //     target: RecordTarget.fromAlias(new BucketWebsiteTarget(this.websiteBucket))
-        // });
     }
 
     private setupCodePipeline() {
