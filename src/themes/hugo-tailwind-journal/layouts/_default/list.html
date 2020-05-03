@@ -1,7 +1,0 @@
-{{ define "content" }}
-<section class="mb-24 md:max-w-2xl md:mx-auto">
-    {{ range site.RegularPages.GroupByDate "2006" -}}
-        {{ partial "posts.html" . }}
-    {{ end }}
-</section>
-{{ end }}
