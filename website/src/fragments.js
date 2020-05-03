@@ -9,7 +9,7 @@ const blogPostTeaserFields = `
     edges {
         node {
             id
-            excerpt(pruneLength: 500)
+            excerpt(pruneLength: 200)
             fields {
                 slug
                 prefix
@@ -18,7 +18,7 @@ const blogPostTeaserFields = `
             frontmatter {
                 title
                 tags
-
+                author
             }
         }
     }

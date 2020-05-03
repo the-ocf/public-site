@@ -15,6 +15,7 @@ const query = `{
         }
         frontmatter {
           title
+          author
         }
       }
     }
@@ -275,6 +276,7 @@ module.exports = {
                       }
                       frontmatter {
                         title
+                        author
                       }
                     }
                   }

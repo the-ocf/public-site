@@ -40,7 +40,7 @@ const Teaser = props => {
             )}
             { !!author ? <span>
               <FaUser size={18} /> {author}
-            </span> : 'no author'}
+            </span> : ''}
 
           </p>
           <p>{excerpt}</p>
