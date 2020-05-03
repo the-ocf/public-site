@@ -1,7 +1,6 @@
 import {Bucket, BucketEncryption} from '@aws-cdk/aws-s3';
 import {Construct, SecretValue, Stack, StackProps} from '@aws-cdk/core';
 import {HostedZone, RecordSet, RecordTarget, RecordType} from '@aws-cdk/aws-route53';
-
 import {CloudFrontTarget} from '@aws-cdk/aws-route53-targets'
 import {Artifact, Pipeline} from "@aws-cdk/aws-codepipeline";
 import {CodeBuildAction, GitHubSourceAction, S3DeployAction} from "@aws-cdk/aws-codepipeline-actions";
@@ -17,7 +16,6 @@ export class InfraStack extends Stack {
     websiteBucket: Bucket;
     redirectBucket: Bucket;
     private buildArtifactBucket: Bucket;
-    private buildSpec: any;
     private distribution: CloudFrontWebDistribution;
     private props: InfraStackProps;
     private oai: OriginAccessIdentity;
@@ -29,7 +27,6 @@ export class InfraStack extends Stack {
         // The code that defines your stack goes here
         this.setupBucket();
         this.setupRoute53();
-        this.setupBuildSpec();
         this.setupCodePipeline();
     }
 
@@ -152,34 +149,4 @@ export class InfraStack extends Stack {
             ]
         });
     }
-
-    private setupBuildSpec() {
-        this.buildSpec = {
-            version: '0.2',
-            phases: {
-                install: {
-                    "runtime-versions": {
-                        "nodejs": "12"
-                    },
-                    commands: [
-                        `curl -O -L https://github.com/gohugoio/hugo/releases/download/v0.63.1/hugo_0.63.1_Linux-64bit.tar.gz`,
-                        `tar -xvf hugo*.tar.gz hugo`,
-                        `mv hugo /usr/local/bin`
-                    ]
-                },
-                build: {
-                    commands: [
-                        'npm install',
-                        `npm run build:prod`
-                    ],
-                },
-            },
-            artifacts: {
-                files: ["**/*"],
-                "base-directory": "dist"
-            }
-        }
-    }
-
-
 }
