@@ -4,4 +4,5 @@ import cdk = require('@aws-cdk/core');
 import { InfraStack } from '../lib/infra-stack';
 
 const app = new cdk.App();
-new InfraStack(app, 'public-site', { env: { region: 'us-east-1' } });
+const hostedZoneId = app.node.tryGetContext("hostedZoneId")
+new InfraStack(app, 'public-site', { hostedZoneId, env: { region: 'us-east-1' } });

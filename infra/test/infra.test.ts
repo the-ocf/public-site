@@ -5,7 +5,7 @@ import Infra = require('../lib/infra-stack');
 test('Empty Stack', () => {
     const app = new cdk.App();
     // WHEN
-    const stack = new Infra.InfraStack(app, 'MyTestStack');
+    const stack = new Infra.InfraStack(app, 'MyTestStack', {hostedZoneId: "ABCDE"});
     // THEN
     expectCDK(stack).to(matchTemplate({
       "Resources": {}
