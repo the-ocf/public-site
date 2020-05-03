@@ -14,7 +14,6 @@ export interface InfraStackProps extends StackProps {
 
 export class InfraStack extends Stack {
     websiteBucket: Bucket;
-    redirectBucket: Bucket;
     private buildArtifactBucket: Bucket;
     private distribution: CloudFrontWebDistribution;
     private props: InfraStackProps;
@@ -24,9 +23,9 @@ export class InfraStack extends Stack {
         super(scope, id, props);
 
         this.props = props;
-        // The code that defines your stack goes here
+
         this.setupBucket();
-        this.setupRoute53();
+        this.setupRoute53AndCerts();
         this.setupCodePipeline();
     }
 
@@ -52,7 +51,7 @@ export class InfraStack extends Stack {
         this.oai = new OriginAccessIdentity(this, 'oai', {});
     }
 
-    setupRoute53() {
+    setupRoute53AndCerts() {
         let domainName = "openconstructfoundation.org";
         let SAN = `www.${domainName}`;
 
