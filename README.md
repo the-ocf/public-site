@@ -5,27 +5,20 @@ This is the source for the public facing openconstructfoundation.org website.
 ## Contents
 
 * infra - the CDK Module that deploys the AWS infrastucture to support this site
-* src - the source code, a [Hugo](https://gohugo.io/) site.
+* src - the source code, [a Gatsby JS site](https://www.gatsbyjs.org/)
 
 ## Development
 
-To install the hugo cli, refer to [these](https://gohugo.io/getting-started/installing/) docs.
+This is a Gatsby site, start the development server:
 
-To run the hugo server:
-
-```shell script
-$ hugo -s src server -w
-```
-
-#### Theme changes
-
-If you want to make changes to the theme of the site, those changes are made directly in the [src/themes/hugo-tailwind-journal](). To recompile Tailwind CSS:
 
 ```shell script
-$ cd src/themes/huge-tailwind-journal
-$ npm run watch
-
+$ cd src
+$ npm install
+$ npm run start
 ```
+
+Add content at `src/content/posts`
 
 ## Contribute
 
