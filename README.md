@@ -13,7 +13,7 @@ This is a Gatsby site, start the development server:
 
 
 ```shell script
-$ cd src
+$ cd website
 $ npm install
 $ npm run start
 ```

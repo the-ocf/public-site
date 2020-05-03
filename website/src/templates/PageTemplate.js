@@ -39,6 +39,7 @@ export const pageQuery = graphql`
       htmlAst
       frontmatter {
         title
+        author
       }
     }
   }

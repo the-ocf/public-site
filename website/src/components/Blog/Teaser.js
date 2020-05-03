@@ -33,14 +33,15 @@ const Teaser = props => {
             <span>
               <FaCalendar size={18} /> {prefix}
             </span>
-            {/* <span>
-              <FaUser size={18} /> {author}
-            </span> */}
             {tags && tags.map(tag =>
               <span key={tag}>
               <FaTag size={18} /> {tag}
               </span>
             )}
+            { !!author ? <span>
+              <FaUser size={18} /> {author}
+            </span> : ''}
+
           </p>
           <p>{excerpt}</p>
         </Link>

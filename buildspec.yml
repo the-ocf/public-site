@@ -8,7 +8,7 @@
     },
     "build": {
       "commands": [
-        "cd src",
+        "cd website",
         "npm install",
         "npm run build"
       ]
@@ -18,6 +18,6 @@
     "files": [
       "**/*"
     ],
-    "base-directory": "src/public"
+    "base-directory": "website/public"
   }
 }
