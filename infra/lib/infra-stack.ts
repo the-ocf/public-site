@@ -50,6 +50,8 @@ export class InfraStack extends Stack {
             zoneName: 'openconstructfoundation.org'
         });
 
+        
+
         new RecordSet(this, 'website-dns-root', {
             recordType: RecordType.A,
             recordName: '@',
