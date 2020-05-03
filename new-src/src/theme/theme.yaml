@@ -57,9 +57,9 @@ color:
     black: '#000000'
 
   brand:
-    primary: &color-brand-primary '#E39E22' #'#07889B' #'#C0B283' #'#856084' #'#616247'
-    primaryLight: '#8EA6C6'
-    primaryDark: '#70809D'
+    primary: &color-brand-primary '#81D4E3' #'#07889B' #'#C0B283' #'#856084' #'#616247'
+    primaryLight: '#ADE3F0'
+    primaryDark: '#71BAC7'
     hover: &color-brand-hover '#C09F80' #'#E37222' #'#DCD0C0' #'#9f7a9d'
     primaryActive: '#709425'
     light: '#709425'
@@ -67,7 +67,7 @@ color:
     dark: '#709425'
     darkActive: '#709425'
   special:
-    attention: &color-special-attention '#E37222' #'#76323F' #'#E37222' #'#C0B283' #'#624761'
+    attention: &color-special-attention '#E39087' #'#76323F' #'#E37222' #'#C0B283' #'#624761'
 # FONT
 font:
   # font options

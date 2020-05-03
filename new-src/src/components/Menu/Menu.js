@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 require("core-js/fn/array/from");
 
-import { FaHome, FaSearch, FaEnvelope, FaTag, FaUser, FaRss } from "react-icons/fa/";
+import { FaHome, FaSearch, FaEnvelope, FaTag, FaUser, FaRss, FaGithub } from "react-icons/fa/";
 
 import Item from "./Item";
 import Expand from "./Expand";
@@ -13,6 +13,7 @@ class Menu extends React.Component {
     this.itemList = React.createRef();
 
     this.items = [
+      { to: "https://github.com/Open-Construct-Foundation/public-site", label: "Github", icon: FaGithub, external: true },
       { to: "/tags/", label: "Tags", icon: FaTag },
       { to: "/follow/", label: "Follow", icon: FaRss },
       { to: "/about/", label: "About", icon: FaUser }
