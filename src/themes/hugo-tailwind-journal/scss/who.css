@@ -1,7 +1,0 @@
-.board-member {
-    @apply p-8 text-center;
-}
-
-.board-member img {
-    @apply border-2 border-blue-100 rounded-full w-48 h-auto mx-auto;
-}
