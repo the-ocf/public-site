@@ -11,6 +11,7 @@ export const ScreenWidthContext = React.createContext(0);
 import themeObjectFromYaml from "../theme/theme.yaml";
 
 import 'typeface-open-sans/index.css'
+import CookieConsent from "react-cookie-consent";
 
 class Layout extends React.Component {
   constructor() {
@@ -63,6 +64,7 @@ class Layout extends React.Component {
             />
             <main>{children}</main>
             <Footer theme={this.state.theme} />
+            <CookieConsent>This website uses cookies. By continuing you conscent.</CookieConsent>
           </div>
           <style jsx>{`
             .highest-container {

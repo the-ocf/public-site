@@ -40,6 +40,7 @@
     "prismjs": "^1.17.1",
     "react": "^16.9.0",
     "react-addons-perf": "^15.4.2",
+    "react-cookie-consent": "^3.0.0",
     "react-dom": "^16.9.0",
     "react-facebook": "^7.0.6",
     "react-helmet": "^5.2.1",
