@@ -1,4 +1,4 @@
-import {Bucket, BucketEncryption} from '@aws-cdk/aws-s3';
+import {Bucket, BucketAccessControl, BucketEncryption} from '@aws-cdk/aws-s3';
 import {Construct, SecretValue, Stack, StackProps} from '@aws-cdk/core';
 import {HostedZone, RecordSet, RecordTarget, RecordType} from '@aws-cdk/aws-route53';
 import {CloudFrontTarget} from '@aws-cdk/aws-route53-targets'
@@ -6,7 +6,12 @@ import {Artifact, Pipeline} from "@aws-cdk/aws-codepipeline";
 import {CodeBuildAction, GitHubSourceAction, S3DeployAction} from "@aws-cdk/aws-codepipeline-actions";
 import {BuildSpec, ComputeType, LinuxBuildImage, PipelineProject} from '@aws-cdk/aws-codebuild';
 import {DnsValidatedCertificate} from "@aws-cdk/aws-certificatemanager";
-import {CloudFrontWebDistribution, OriginAccessIdentity, ViewerCertificate} from "@aws-cdk/aws-cloudfront";
+import {
+    CloudFrontWebDistribution,
+    OriginAccessIdentity,
+    OriginProtocolPolicy,
+    ViewerCertificate
+} from "@aws-cdk/aws-cloudfront";
 
 export interface InfraStackProps extends StackProps {
     hostedZoneId: string;
@@ -39,16 +44,8 @@ export class InfraStack extends Stack {
 
 
         this.websiteBucket = new Bucket(this, 'website-bucket', {
-            bucketName: 'www.openconstructfoundation.org',
-            blockPublicAccess: {
-                blockPublicAcls: true,
-                blockPublicPolicy: true,
-                ignorePublicAcls: true,
-                restrictPublicBuckets: true
-            }
+            bucketName: 'www.openconstructfoundation.org'
         });
-
-        this.oai = new OriginAccessIdentity(this, 'oai', {});
     }
 
     setupRoute53AndCerts() {
@@ -71,9 +68,11 @@ export class InfraStack extends Stack {
 
             originConfigs: [
                 {
-                    s3OriginSource: {
-                        s3BucketSource: this.websiteBucket,
-                        originAccessIdentity: this.oai
+                    customOriginSource: {
+                        httpPort: 80,
+                        httpsPort: 443,
+                        originProtocolPolicy: OriginProtocolPolicy.HTTP_ONLY,
+                        domainName: "www.openconstructfoundation.org.s3-website-us-east-1.amazonaws.com"
                     },
                     behaviors: [{isDefaultBehavior: true}]
                 }
@@ -112,7 +111,8 @@ export class InfraStack extends Stack {
             actionName: 'copy-files',
             bucket: this.websiteBucket!,
             input: compiledSite,
-            runOrder: 1
+            runOrder: 1,
+            accessControl: BucketAccessControl.PUBLIC_READ
         });
 
         new Pipeline(this, "build-pipeline", {
