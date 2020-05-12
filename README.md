@@ -1,6 +1,6 @@
 # The Open Construct Foundation Public Site
 
-This is the source for the public facing openconstructfoundation.org website.
+This is the source for the public facing [openconstructfoundation.org](https://openconstructfoundation.org/) website.
 
 ## Contents
 
