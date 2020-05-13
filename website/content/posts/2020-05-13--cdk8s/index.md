@@ -193,7 +193,7 @@ export class WebService extends Construct {
 
 Then that construct can be used in a 'Chart':
 
-```
+```typescript
 import { Construct } from 'constructs';
 import { App, Chart } from 'cdk8s';
 import { WebService } from './web-service';
