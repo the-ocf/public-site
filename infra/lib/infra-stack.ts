@@ -3,7 +3,12 @@ import {Construct, SecretValue, Stack, StackProps} from '@aws-cdk/core';
 import {HostedZone, RecordSet, RecordTarget, RecordType} from '@aws-cdk/aws-route53';
 import {CloudFrontTarget} from '@aws-cdk/aws-route53-targets'
 import {Artifact, Pipeline} from "@aws-cdk/aws-codepipeline";
-import {CodeBuildAction, GitHubSourceAction, S3DeployAction} from "@aws-cdk/aws-codepipeline-actions";
+import {
+    CodeBuildAction,
+    GitHubSourceAction,
+    LambdaInvokeAction,
+    S3DeployAction
+} from "@aws-cdk/aws-codepipeline-actions";
 import {BuildSpec, ComputeType, LinuxBuildImage, PipelineProject} from '@aws-cdk/aws-codebuild';
 import {DnsValidatedCertificate} from "@aws-cdk/aws-certificatemanager";
 import {
@@ -12,6 +17,8 @@ import {
     OriginProtocolPolicy,
     ViewerCertificate
 } from "@aws-cdk/aws-cloudfront";
+import {Effect, PolicyStatement} from "@aws-cdk/aws-iam";
+import {Code, Function, Runtime} from "@aws-cdk/aws-lambda";
 
 export interface InfraStackProps extends StackProps {
     hostedZoneId: string;
@@ -115,12 +122,37 @@ export class InfraStack extends Stack {
             accessControl: BucketAccessControl.PUBLIC_READ
         });
 
+        const invalidateLambda = new Function(this, 'invalidate-function', {
+            code: Code.fromAsset('./lib/handlers/invalidate-cache'),
+            environment: {},
+            handler: "index.handler",
+            runtime: Runtime.NODEJS_10_X
+        });
+
+        invalidateLambda.addToRolePolicy(new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+                "codepipeline:PutJobSuccessResult",
+                "cloudfront:CreateInvalidation"
+            ],
+            resources: ["*"]
+        }));
+
+        const invalidateCache = new LambdaInvokeAction({
+            actionName: "invalidate-cache",
+            lambda: invalidateLambda,
+            // @ts-ignore
+            userParameters: this.distribution.distributionId,
+            runOrder: 2
+        });
+
         new Pipeline(this, "build-pipeline", {
             artifactBucket: this.buildArtifactBucket,
             pipelineName: 'ocf-build-pipeline',
             stages: [
                 {
-                    stageName: "pull", actions: [
+                    stageName: "pull",
+                    actions: [
                         new GitHubSourceAction({
                             owner: 'Open-Construct-Foundation',
                             repo: 'public-site',
@@ -131,7 +163,8 @@ export class InfraStack extends Stack {
                     ]
                 },
                 {
-                    stageName: "build", actions: [
+                    stageName: "build",
+                    actions: [
                         new CodeBuildAction({
                             actionName: 'build',
                             input: sourceArtifact,
@@ -141,8 +174,10 @@ export class InfraStack extends Stack {
                     ]
                 },
                 {
-                    stageName: "deploy", actions: [
-                        s3DeployAction
+                    stageName: "deploy",
+                    actions: [
+                        s3DeployAction,
+                        invalidateCache
                     ]
                 },
             ]
