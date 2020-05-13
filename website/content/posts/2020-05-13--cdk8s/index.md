@@ -1,21 +1,25 @@
 ---
-title: "The cdk8s, the AWS CDK for Kubernetes"
+title: cdk8s, the Cloud Development Kit for Kubernetes
 description: The AWS Cloud Development Kit is available for generating Kubernetes resource definitions
+author: Matthew Bonig @mattbonig
+tags: ["cdks","kubernetes"]
 ---
 
 ## Bringing the CDK to other platforms
 
-The Cloud Development Kit drastically changed how Infrastructure as Code in large organizations is developed.
- Infrastructure rules can easily be defined within constructs and distributed for use. 
+The Cloud Development Kit drastically changed how Infrastructure as Code is developed in large organizations.
+ Infrastructure rules can easily be defined within constructs and distributed for use to multiple teams.
  That kind of power wasn't going to remain an exclusive tool of AWS.
-  
-The AWS Cloud Development Kit is now available for Kubernetes! 
+
+Today at the CNCF Member Webinar the AWS Team responsible for the CDK unveiled the cdk8s!
+
+Check it out at [Github](https://github.com/awslabs/cdk8s) and join the [Slack](https://join.slack.com/t/cdk8s/shared_invite/enQtOTY0NTMzMzY4MjU3LWMyYzM2ZmQzOTAyZjAzY2E5MGNjNmJlMDgwZWQwM2M0YTAwMTE5MmE3ZGM3OWY2N2ZkYjQ3NjBkOWYwMDg0ZWU).
 
 ### But don't we have Helm?
 
-Helm is the standard tool on Kubernetes to manage more complex resource definitions. 
-Based in Go and leveraging its powerful templating language means you take your existing yaml files 
-and decorate them with Go templating code. 
+Helm is the standard tool on Kubernetes to manage more complex resource definitions.
+Based in Go and leveraging its powerful templating language means you take your existing yaml files
+and decorate them with Go templating code.
 You can create some massively complex and powerful definitions.
 
 Here is a RabbitMQ Helm template file that defines just the StatefulSet portion of the deploy:
@@ -45,9 +49,9 @@ spec:
       {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
       {{- end }}
-    
+
     ... 30 lines later ...
-    
+
        initContainers:
       - name: volume-permissions
         image: "{{ template "rabbitmq.volumePermissions.image" . }}"
@@ -90,9 +94,9 @@ spec:
             {{- end }}
             exec rabbitmq-server
         {{- if .Values.resources }}
-   
+
    ... 250 lines later ...
-   
+
   {{- else }}
   volumeClaimTemplates:
     - metadata:
@@ -112,38 +116,60 @@ spec:
 
 ```
 
-While there is a lot of complexity and sophistication, it's not exactly readable and managable.
+While there is a lot of complexity and sophistication, it's not exactly readable and manageable.
  It has a steep learning curve and can be painful to debug. It violates most of the good principles found in [SOLID](https://en.wikipedia.org/wiki/SOLID) and [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself).
 
 ## Example
 
-In this example, a simple microservice is defined. 
+First, a simple microservice is defined, consisting of a Service and Deployment.
 
 ```typescript
-import { Construct } from '@aws-cdk/core';
-import { App, Chart } from 'cdk8s';
+import { Construct, Node } from 'constructs';
+import { Deployment, Service, IntOrString } from './imports/k8s';
 
-// import generated constructs
-import { Service, IntOrString } from './.gen/service-v1';
-import { Deployment } from './.gen/apps-deployment-v1';
+export interface WebServiceOptions {
+  /** The Docker image to use for this service. */
+  readonly image: string; // docker image to use for this service
 
-class MyChart extends Chart {
-  constructor(scope: Construct, name: string) {
-    super(scope, name);
+  /**
+   * Number of replicas.
+   * @default 1
+   */
+  readonly replicas?: number;
 
-    const label = { app: 'hello-k8s' };
+  /**
+   * External port.
+   * @default 80
+   */
+  readonly port?: number;
+
+  /**
+   * Internal port.
+   * @default 8080
+   */
+  readonly containerPort?: number;
+}
+
+export class WebService extends Construct {
+  constructor(scope: Construct, ns: string, options: WebServiceOptions) {
+    super(scope, ns);
+
+    const port = options.port || 80;
+    const containerPort = options.containerPort || 8080;
+    const label = { app: Node.of(this).uniqueId };
+    const replicas = options.replicas ?? 1;
 
     new Service(this, 'service', {
       spec: {
         type: 'LoadBalancer',
-        ports: [ { port: 80, targetPort: IntOrString.fromNumber(8080) } ],
+        ports: [ { port, targetPort: IntOrString.fromNumber(containerPort) } ],
         selector: label
       }
     });
 
     new Deployment(this, 'deployment', {
       spec: {
-        replicas: 2,
+        replicas,
         selector: {
           matchLabels: label
         },
@@ -152,9 +178,9 @@ class MyChart extends Chart {
           spec: {
             containers: [
               {
-                name: 'hello-kubernetes',
-                image: 'paulbouwer/hello-kubernetes:1.5',
-                ports: [ { containerPort: 8080 } ]
+                name: 'web',
+                image: options.image,
+                ports: [ { containerPort } ]
               }
             ]
           }
@@ -163,84 +189,38 @@ class MyChart extends Chart {
     });
   }
 }
-
-const app = new App();
-new MyChart(app, 'hello');
-app.synth();
 ```
 
-We can also take this code and refactor it slightly, creating a new custom construct that enforces some business logic.
+Then that construct can be used in a 'Chart':
 
-```typescript
-import {Construct} from '@aws-cdk/core';
-import {App, Chart} from 'cdk8s';
-// import generated constructs
-import {IntOrString, Service} from './.gen/service-v1';
-import {Deployment} from './.gen/apps-deployment-v1';
-
-
-interface MicroserviceProps {
-    image: string;
-    label: any;
-    ports: any[];
-    replicas?: number;
-}
-
-class Microservice extends Construct {
-
-    constructor(scope: Construct, name: string, props: MicroserviceProps) {
-        super(scope, name);
-        let {ports, label, replicas, image} = {replicas: 2, ...props};
-        new Service(this, 'service', {
-            spec: {
-                type: 'LoadBalancer',
-                ports: ports.map(port => ({port: 80, targetPort: IntOrString.fromNumber(port.containerPort)})),
-                selector: label
-            }
-        });
-
-        new Deployment(this, 'deployment', {
-            spec: {
-                replicas,
-                selector: {
-                    matchLabels: label
-                },
-                template: {
-                    metadata: {labels: label},
-                    spec: {
-                        containers: [
-                            {
-                                name: `${name}`,
-                                image: image,
-                                ports: ports
-                            }
-                        ]
-                    }
-                }
-            }
-        });
-    }
-}
+```
+import { Construct } from 'constructs';
+import { App, Chart } from 'cdk8s';
+import { WebService } from './web-service';
 
 class MyChart extends Chart {
-    constructor(scope: Construct, name: string) {
-        super(scope, name);
+  constructor(scope: Construct, ns: string) {
+    super(scope, ns);
 
-        new Microservice(this, `${name}-microservice`, {
-            image: 'paulbouwer/hello-kubernetes:1.5',
-            label: {app: 'hello-k8s'},
-            ports: [{containerPort: 8080}]
-        });
-    }
+    new WebService(this, 'hello', {
+      image: 'paulbouwer/hello-kubernetes:1.7',
+      replicas: 2
+    });
+
+    new WebService(this, 'ghost', {
+      image: 'ghost',
+      containerPort: 2368,
+    });
+  }
 }
 
 const app = new App();
-new MyChart(app, 'hello');
+new MyChart(app, 'web-service-example');
 app.synth();
 ```
 
-Now there is a Microservice construct that can be distributed to any number of different teams. 
+Just like the AWS CDK!
 
-## Current State
+Check it out at [Github](https://github.com/awslabs/cdk8s) and join the [Slack](https://join.slack.com/t/cdk8s/shared_invite/enQtOTY0NTMzMzY4MjU3LWMyYzM2ZmQzOTAyZjAzY2E5MGNjNmJlMDgwZWQwM2M0YTAwMTE5MmE3ZGM3OWY2N2ZkYjQ3NjBkOWYwMDg0ZWU).
 
-As of this writing (March 2020) the cdk8s is still in pre-release and should be used with caution. Many changes are likely coming that could be breaking-changes to any code you write with the cdk8s.
+Happy constructing!
