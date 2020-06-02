@@ -8,38 +8,48 @@ tags: ["cdks","kubernetes","testing"]
 permalink: 2020/05/29/cdk8s-to-helm
 ---
 
+The [cdk8s](https://github.com/awslabs/cdk8s) is a powerful tool that allows DevOps engineers a new level of productivity
+in creating Infrastructure as Code. However, adoption will not be easy, as there is no easy path from existing charts
+to cdk8s constructs.
+
 ## The Goal
 
-The [cdk8s](https://github.com/awslabs/cdk8s) is a powerful tool allowing DevOps engineers a new level of productivity in creating Infrastructure as Code. However, adoption will not be easy, as there is no easy path from existing charts to cdk8s constructs.
+I wanted to see what it would take to convert a helm chart to a cdk8s construct, so I began with a semi-complex chart,
+[the stable mysql helm chart](https://github.com/helm/charts/tree/master/stable/mysql). I felt it was pretty representative
+of the average Helm chart in terms of complexity and scope.
 
-I wanted to see what it would take to convert a helm chart to a cdk8s construct, so I began with a semi-complex chart, [the stable mysql chart](https://github.com/helm/charts/tree/master/stable/mysql).
+All the code referenced here is available at [this repo](https://github.com/mbonig/helm-to-cdk8s). This is proof-of-concept
+code, and is not properly documented or production worthy.
 
-All the code referenced here is available at [this repo](). This is proof-of-concept code, and is not properly documented or production worthy.
 ## The Problem
 
-When I first sat down to do the work I realized very quickly that trying to reverse engineer the various helm templates would result in a lot of mistakes.
+When I first sat down to do the conversion I realized very quickly that trying to reverse engineer the various helm templates would result in a lot of mistakes.
 
 More importantly, my unit tests would suffer from the same mistakes as the implementing code. I couldn't rely on my correct reading of the existing chart to ensure my conversion was right.
 
-I decided to use helm itself as part of the testing by using helm output as snapshots to test against.
+Using helm itself to write the tests felt like a solid approach that would reduce missed functionality. All tests will
+follow a basic process:
 
 * run `helm template . > default.snapshot.yaml`
-* test it by creating my new construct, using the exact `values.yaml` file, and then compare the synth to the snapshot
+* test by creating my new construct, using the exact `values.yaml` file, and then compare the `synth` to the snapshot
 
-However, that only tested a small part of the overall template, so I needed more snapshots.
+I wrote the tests and then wrote the construct for just this one snapshot and felt pretty good about things. However,
+that only tested a small part of the overall template, so I needed more snapshots.
 
 ## The Solution
 
 Getting 100% correct coverage required knowing all the combination of values that could be provided to the existing
-helm charts and tested against. Each new 'values' file I created is called a 'variant'. The default `values.yaml` that's part of all
+helm charts. Each new 'values' file I created is called a 'variant'. The default `values.yaml` that's part of all
 good helm charts is the first variant.
 
-The default values files documented these values well, but I figured not all helm charts will, and I wanted a process
-that still determined variants even without good documentation.
+The default values files documented all the possible values pretty well, but I figured not all helm charts will. Some
+values files (especially in enterprise) are unlikely to have nice comments and examples of non-default values to use.
+I wanted a process that still determined variants even without good documentation.
 
-A simple Regex `.Values.` got me all Values used in the `deployment.yaml`:
+I started by using a simple Regex ( `.Values.` ) to get all the Values used in the `deployment.yaml`:
 
 ![allvalues](./all-values.png)
+[truncated]
 
 Many of these references were simple, like:
 
@@ -47,7 +57,7 @@ Many of these references were simple, like:
 image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
 ```
 
-But, there were a lot of 'if' usages (used `/if.*.Values./`), and those required special attention. If they are simple
+But, there were a lot of 'if' usages ( `/if.*.Values./` ), and those required special attention. If they are simple
 'if's:
 
 ```yaml
@@ -65,21 +75,21 @@ or
       {{- end }}
 ```
 
-These are just simple "null" checks and the second variant (setting all values) will exercise those conditionals.
+These are just "null" checks and the second variant (setting all values) would exercise those conditionals.
 
-But, sometimes I came across an 'if' with more complexity ( and / or ), like:
+Sometimes I came across an 'if' with more complexity ( and / or ), like:
 
 ```yaml
-        {{- if not (and .Values.allowEmptyRootPassword (not .Values.mysqlRootPassword)) }}
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "mysql.secretName" . }}
-              key: mysql-root-password
-              {{- if .Values.mysqlAllowEmptyPassword }}
-              optional: true
-              {{- end }}
-        {{- end }}
+{{- if not (and .Values.allowEmptyRootPassword (not .Values.mysqlRootPassword)) }}
+- name: MYSQL_ROOT_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ template "mysql.secretName" . }}
+      key: mysql-root-password
+      {{- if .Values.mysqlAllowEmptyPassword }}
+      optional: true
+      {{- end }}
+{{- end }}
 
 ```
 
@@ -91,8 +101,8 @@ and 'AND' `with persistence.enabled`.
 
 ![hot ifs](./hot-ifs.png)
 
-The second variant (variant-1) is actually really simple then: just set everything! Go down your list of values (don't
-trust the default `values.yaml` to have these properly documented) and provide a value.
+The second variant (variant-1) is actually really simple then: just set everything! I went down the list of values (don't
+trust the default `values.yaml` to have these properly documented) and provided a value.
 
 The tests for the second variant got created and after some more implementation they were all passing and I knew I had
 a lot of coverage.
@@ -162,7 +172,7 @@ I then wrote into each box what variant represented that condition, or assigned 
 Notice that variant-1 also produces a PVC template. I could have chosen instead to modify variant-1 so
 that it had a `existingClaim` and therefore would be in the upper left box. However, I didn't want to
 modify an existing variant (and it'll be important later). Variants 2 and 3 haven't been created yet so their assignment
-is arbitrary.
+was arbitrary.
 
 This now took care of that particular set of logic, but keep digging and you'll see
 there is another AND in the template, lines:
@@ -175,7 +185,7 @@ there is another AND in the template, lines:
   storageClassName: "{{ .Values.persistence.storageClass }}"
 ```
 
-This reads: if `persistence.storageClass` has been provided and is not '-' just pass that through.
+This reads: if `persistence.storageClass` has been provided and is not '-', just pass that through.
 If it was provided and is '-' then purposely put an empty field.
 
 Working the grid again I end up with:
@@ -187,17 +197,17 @@ Working the grid again I end up with:
 
 Notice the implicit AND here, that the template has to be rendered for any of this to matter. So now when I go to assign
 variants to the two cases where `storageClass` is provided, it has to be with the `enabled` and `!existingClaim` as well.
-Variant-1 already represents this scenario, so I'll reuse it.
+Variant-1 already represents this scenario, so I'll reuse it (and why I didn't change anything in the first step).
 
 | |storageClass|not storageClass|
 |---|---|---|
 |is '-'|'' (variant-4)|❌ (default)
 |is not '-'|storageClass (variant-1)|❌ (default)
 
-Variant-4 was then created and added to tests and variant-1 was updated to set the storageClass to something other than
-'-'. The existing PVC should now be completely covered by all 5 variants.
+Variant-1 was updated to set the storageClass to something other than '-' and Variant-4 was then created and added to tests.
+The existing PVC should now be completely covered by all 5 variants.
 
-I followed the same process for the Deployment resource:
+Now back to the Deployment; I followed the same process for the Deployment resource:
 
 ```yaml
     {{- if not (and .Values.allowEmptyRootPassword (not .Values.mysqlRootPassword)) }}
@@ -212,15 +222,16 @@ I followed the same process for the Deployment resource:
     {{- end }}
 ```
 
-Those fields I mentioned before like `allowEmptyRootPassword`
- got put into a grid and worked like above:
+
+Resulting in this grid:
+
 
 | |allowEmptyRootPassword | not allowEmptyRootPassword
 |---|---|---
 |mysqlRootPassword|✅ |✅
 |not mysqlRootPassword|❌ |✅
 
-Since these variables have no overlap with the previous persistence variables, I was free to assign them to whatever
+Since these variables have no overlap with the previous persistence variables I already setup, I was free to assign them to whatever
 variants already existed:
 
 | |allowEmptyRootPassword | not allowEmptyRootPassword
@@ -228,7 +239,7 @@ variants already existed:
 |mysqlRootPassword|✅ (variant-2) |✅ (variant-1)
 |not mysqlRootPassword|❌  (variant-3)|✅ (default)
 
-The logic in the template only had a simple 'if':
+Finally, the logic in the template only had a simple 'if':
 
 ```yaml
 {{- if .Values.mysqlAllowEmptyPassword }}
