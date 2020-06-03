@@ -261,9 +261,8 @@ The mysql chart also includes a `_helpers.tpl` that had some functionality that 
 were pretty boring and routine unit tests so I didn't include them here.
 
 It took a while to get there, but I believe I've been able to replicate all the functionality in the original helm chart.
+I also added some functionality to the `main.ts` to replicate some of helm's CLI parameters, like 'namespace',
+'release-name' and the '-f' for values files.
 
 I think I got it right, but if you see a flaw in my conversion, please open issues or pull requests against the
 [github repo](https://github.com/mbonig/helm-to-cdk8s).
-
-
-
