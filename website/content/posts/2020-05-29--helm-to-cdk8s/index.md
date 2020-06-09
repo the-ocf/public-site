@@ -1,10 +1,9 @@
 ---
-layout: blog.hbs
 title: cdk8s Migration from helm
 description: I wanted to see what it was actually like to migrate a helm chart to a cdk8s construct. I'll take you through what I found.
 author: Matthew Bonig @mattbonig
 date: 2020-05-29
-tags: ["cdks","kubernetes","testing"]
+tags: ["cdk8s","kubernetes","testing","migrating", "helm"]
 permalink: 2020/05/29/cdk8s-to-helm
 ---
 
