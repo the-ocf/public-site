@@ -71,7 +71,7 @@ module.exports = {
         isTSX: true, // defaults to false
         //jsxPragma: `jsx`, // defaults to "React" ??
         allExtensions: true
-      },
+      }
     },
     {
       resolve: `gatsby-plugin-layout`,
@@ -121,22 +121,27 @@ module.exports = {
             options: {
               maxWidth: 800,
               backgroundColor: "transparent",
-              tracedSVG: { color: '#f9ebd2' }
+              tracedSVG: { color: "#f9ebd2" }
             }
           },
           {
             resolve: `gatsby-remark-rehype-images`,
             options: {
-              tag: 're-img',
+              tag: "re-img",
               maxWidth: 800,
               quality: 90,
               webP: true,
-              toFormat: 'WEBP',
-              tracedSVG: { color: '#f9ebd2' },
+              toFormat: "WEBP",
+              tracedSVG: { color: "#f9ebd2" },
               generateTracedSVG: true
             }
           },
-
+          {
+            resolve: "gatsby-remark-external-links",
+            options: {
+              target: "_blank"
+            }
+          },
           {
             resolve: `gatsby-remark-responsive-iframe`,
             options: {
