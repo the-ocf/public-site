@@ -84,6 +84,17 @@ $ npm i -s @aws-cdk/core @aws-cdk/aws-s3
 $ npm i --save-dev @aws-cdk/assert
 ```
 
+Note: When installing dependencies, review your package.json before publishing. If you'd like to support future versions of the CDK, ensure your peerDependencies are setup with a "^":
+
+```json
+"peerDependencies": {
+  "@aws-cdk/core": "^1.45.0",
+  "@aws-cdk/aws-lambda-nodejs": "^1.45.0",
+  "@aws-cdk/aws-sqs": "^1.45.0"
+}
+```
+
+Without this your construct will only support the specific version of the CDK you have in your package.json. This isn't very convienent. 
 
 Here's the test and code:
 
