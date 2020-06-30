@@ -11,6 +11,8 @@ AWS just released the [Solutions Constructs](https://aws.amazon.com/solutions/co
 L3 micro-constructs that can be used as building blocks for serverless applications. These are leveraged the same way
 as the standard L2 and L3 constructs. Let's dive right in and take a look at a few:
 
+The CDK code from this post can be found [here](https://github.com/mbonig/solutions-constructs-example).
+
 ## API Gateway to Lambda
 
 Here is a standard setup for API Gateway to a Lambda function.
@@ -270,5 +272,3 @@ changed with the release to v1.47.0.
 Like the CDK, the strength comes from a thriving community of L3 constructs you can use to build architectures. The
 addition of these new AWS Solutions Constructs should help get people building great architectures quickly and I'm
 excited to see how this grows over time.
-
-
