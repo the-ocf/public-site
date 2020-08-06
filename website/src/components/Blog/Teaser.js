@@ -16,12 +16,12 @@ const Teaser = props => {
       frontmatter: {
         title,
         tags,
-        author
+        author,
+        image
       }
     },
     index
   } = props;
-
   return (
     <React.Fragment>
       <li>
@@ -44,6 +44,7 @@ const Teaser = props => {
 
           </p>
           <p>{excerpt}</p>
+          { !!image && image.publicURL ? <img src={image.publicURL}/>: ''}
         </Link>
       </li>
 
@@ -70,6 +71,11 @@ const Teaser = props => {
           }
           :global(.gatsby-image-outer-wrapper img) {
             z-index: -1;
+          }
+
+          img {
+            max-width: 100%;
+            margin: 2rem;
           }
 
           &::after {

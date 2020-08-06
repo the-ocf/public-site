@@ -19,6 +19,9 @@ const blogPostTeaserFields = `
                 title
                 tags
                 author
+                image{
+                  publicURL
+                }
             }
         }
     }
