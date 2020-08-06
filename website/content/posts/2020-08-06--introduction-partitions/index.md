@@ -21,16 +21,17 @@ created the OCF, to hopefully be a central place for good information.
 
 ![Partitions.io](./partitions.png)
 
-The first version of this website was... not good. I hated it from day one and launched it only to check-off a goal for 2019.
-This new blog format felt better, but I knew it was always going to fall short. I've been keeping my eye open for new
-options.
+The first version of the OCF website was not good. I hated it from day one and launched it only to check-off a goal for 2019.
+This new blog format feels better, but I knew it was always going to fall short of the original OCF goals. I've been
+keeping my eye open for new options.
 
-Back at the end of July, I got an unsolicited email about a system called partitions.io. I was mostly impressed
+Back at the end of July, I got an unsolicited email about a system called **partitions.io**. I was mostly impressed
 with the boldness and focus of the email (this isn't an email address I generally toss around). I felt the extra
 effort deserved a look at the [tour](https://www.partitions.io/tour) of the product.
 
-I think I was about 3 minutes in when I knew I wanted this. I signed up, played around and loved the feel. I replied to
-[Jacob Comer](https://www.linkedin.com/in/jacobcomer/) immediately. I knew I wanted this for the CDK.
+I was about 3 minutes in when I knew I wanted it. I signed up, played around and loved the feel. I replied to
+[Jacob Comer](https://www.linkedin.com/in/jacobcomer/) immediately. I knew I wanted this for the CDK but it was going
+to need a couple tweaks to work.
 
 And boy, oh boy, did Jacob come through! He took some feedback and quickly made some changes to allow it to be a
 community-focused product. He has graciously provided the [CDK community a board to use](https://partitions.io/cdk)!
