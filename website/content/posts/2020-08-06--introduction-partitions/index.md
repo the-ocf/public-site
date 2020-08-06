@@ -3,7 +3,7 @@ title: Announcing the OCF's partitions.io board!
 description: Finding help and learning about the CDK and constructs just got easier thanks to partitions.io!
 author: Matthew Bonig @mattbonig
 date: 2020-08-06
-tags: ["cdk","paritions.io", "forum", "help"]
+tags: ["cdk","partitions.io", "forum", "help"]
 image: ./partitions.png
 ---
 
@@ -17,7 +17,7 @@ questions. But lately, it feels like I'm playing whack-a-mole with unread counts
 For the CDK community to thrive I believe it will require good community interaction. This is why I originally
 created the OCF, to hopefully be a central place for good information.
 
-**I'd like to introduce you to The Open Construct Foundation's [paritions.io](https://partitions.io/cdk) board for the construct community!**
+**I'd like to introduce you to The Open Construct Foundation's [partitions.io](https://partitions.io/cdk) board for the construct community!**
 
 ![Partitions.io](./partitions.png)
 
