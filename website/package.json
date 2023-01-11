@@ -32,7 +32,7 @@
     "gatsby-remark-responsive-iframe": "^2.4.12",
     "gatsby-remark-smartypants": "^2.3.10",
     "gatsby-source-filesystem": "^2.3.24",
-    "gatsby-transformer-remark": "^2.8.28",
+    "gatsby-transformer-remark": "^5.25.1",
     "gatsby-transformer-sharp": "^2.5.12",
     "js-yaml": "^3.14.0",
     "lodash.throttle": "^4.1.1",
