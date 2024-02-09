@@ -30,7 +30,6 @@ export class WebsiteStack extends Stack {
       domainNames: ['www.openconstructfoundation.org', 'openconstructfoundation.org'],
     });
 
-    execSync('npm run build', { cwd: '../the-ocf-website' });
     new BucketDeployment(this, 'DeployWebsite', {
       sources: [Source.asset('../the-ocf-website/out')],
       destinationBucket: bucket,

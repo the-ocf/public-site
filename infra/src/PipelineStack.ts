@@ -14,7 +14,10 @@ export class PipelineStack extends Stack {
         }),
         primaryOutputDirectory: 'infra/cdk.out',
         commands: [
-          'cd infra',
+          'cd the-ocf-website',
+          'npm install',
+          'npm run build',
+          'cd ../infra',
           'yarn',
           'yarn build',
           'npx cdk synth',
