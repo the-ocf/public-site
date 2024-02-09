@@ -9,10 +9,12 @@ export class PipelineStack extends Stack {
 
     const pipeline = new CodePipeline(this, 'Pipeline', {
       synth: new ShellStep('Synth', {
-        input: CodePipelineSource.connection('the-ocf/public-site', 'main', {
+        input: CodePipelineSource.connection('the-ocf/public-site', 'feat/new-content', {
           connectionArn: 'arn:aws:codestar-connections:us-east-1:935412892586:connection/d4dc7104-a60f-4f8f-b259-48b98cea4b22',
         }),
+        primaryOutputDirectory: 'infra/cdk.out',
         commands: [
+          'cd infra',
           'yarn',
           'yarn build',
           'npx cdk synth',

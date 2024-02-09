@@ -1,4 +1,5 @@
-import { DockerImage, Stack, StackProps } from 'aws-cdk-lib';
+import { execSync } from 'node:child_process';
+import { Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
@@ -29,21 +30,16 @@ export class WebsiteStack extends Stack {
       domainNames: ['www.openconstructfoundation.org', 'openconstructfoundation.org'],
     });
 
+    execSync('npm run build', { cwd: '../the-ocf-website' });
     new BucketDeployment(this, 'DeployWebsite', {
-      sources: [Source.asset('../the-ocf-website/out', {
-        bundling: {
-          command: ['npm', 'run', 'build'],
-          workingDirectory: '../the-ocf-website',
-          image: DockerImage.fromRegistry('node:20'),
-        },
-      })],
+      sources: [Source.asset('../the-ocf-website/out')],
       destinationBucket: bucket,
       distribution: dist,
       distributionPaths: ['/*'],
     });
 
 
-    new ARecord(this, 'Alias', {
+    new ARecord(this, 'WWWAlias', {
       zone: hostedZone,
       target: {
         aliasTarget: new CloudFrontTarget(dist),
@@ -51,7 +47,7 @@ export class WebsiteStack extends Stack {
       recordName: 'www',
       deleteExisting: true,
     });
-    new ARecord(this, 'Alias', {
+    new ARecord(this, 'RootAlias', {
       zone: hostedZone,
       target: {
         aliasTarget: new CloudFrontTarget(dist),
