@@ -1,6 +1,6 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
-import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
+import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
+import { Distribution, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { ARecord, HostedZone } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
@@ -23,9 +23,16 @@ export class WebsiteStack extends Stack {
 
     // Create CloudFront distribution
     const dist = new Distribution(this, 'Distribution', {
-      defaultBehavior: { origin: new S3Origin(bucket) },
-
-      certificate: Certificate.fromCertificateArn(this, 'Certificate', 'arn:aws:acm:us-east-1:935412892586:certificate/16724c20-4370-4e56-8d7a-1c1d48022674'),
+      defaultBehavior: {
+        origin: new S3Origin(bucket),
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      },
+      certificate: new Certificate(this, 'Certificate', {
+        domainName: 'www.openconstructfoundation.org',
+        validation: CertificateValidation.fromDns(hostedZone),
+        subjectAlternativeNames: ['openconstructfoundation.org'],
+      }),
+      defaultRootObject: 'index.html',
       domainNames: ['www.openconstructfoundation.org', 'openconstructfoundation.org'],
     });
 
