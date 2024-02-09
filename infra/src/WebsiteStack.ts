@@ -1,4 +1,3 @@
-import { execSync } from 'node:child_process';
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
