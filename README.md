@@ -11,11 +11,10 @@ This is the source for the public facing [openconstructfoundation.org](https://o
 
 This is a Gatsby site, start the development server:
 
-
 ```shell script
-$ cd website
-$ npm install
-$ npm run start
+cd website
+npm install
+npm run start
 ```
 
 Add content at `src/content/posts`
@@ -24,6 +23,6 @@ Add content at `src/content/posts`
 
 This website is supported by the community. If you'd like to contribute, please open a [PR](https://github.com/Open-Construct-Foundation/public-site/pulls).
 
-## Donate   
+## Donate
 
 The OCF website is pretty cheap to run, but if you'd like to donate to help future endeavors and cover the minimal costs, please reach out to [@mattbonig](https://twitter.com/mattbonig) on Twitter.
