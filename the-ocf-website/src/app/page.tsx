@@ -205,7 +205,7 @@ export default function Home() {
                 A non-profit organization that plays a pivotal role in the AWS CDK ecosystem.
               </p>
             </div>
-            <div className='w-full md:w-1/4 lg:w-2/12 px-4 mb-16 lg:mb-0'>
+            {/* <div className='w-full md:w-1/4 lg:w-2/12 px-4 mb-16 lg:mb-0'>
               <h3 className='mb-5 text-lg font-bold text-white'>Product</h3>
               <ul>
                 <li className='mb-4'>
@@ -315,7 +315,7 @@ export default function Home() {
                   </a>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className='border-b border-coolGray-800' />
