@@ -1,5 +1,15 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Design and Assets
+
+The design of the website was generated from a Shuffle theme [Flex](https://shuffle.dev/components/all/flex)
+by customizing the Tailwind theme.
+
+It also uses Radix Icons instead of Shuffle-icons, because a library that the demo icons come from could not be identified and we needed other icons.
+
+- [Tailwind](https://tailwindcss.com/docs/installation)
+- [Radix Icons](https://www.radix-ui.com/icons)
+
 ## Getting Started
 
 First, run the development server:
