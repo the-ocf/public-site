@@ -9,15 +9,13 @@ This is the source for the public facing [openconstructfoundation.org](https://o
 
 ## Development
 
-This is a Gatsby site, start the development server:
+This is a NextJS site, start the development server:
 
 ```shell script
 cd website
 npm install
-npm run start
+npm run dev
 ```
-
-Add content at `src/content/posts`
 
 ## Contribute
 
