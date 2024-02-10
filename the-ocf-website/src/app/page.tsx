@@ -64,12 +64,11 @@ export default function Home() {
                   Find and use open-source Community Cloud Development Kit (CDK) construct libraries.
                 </p>
                 <p className='mt-8'>
-                  <a
-                    className='py-3 px-4 leading-4 text-green-50 font-medium text-center bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 rounded-md shadow-sm'
-                    href='#'
+                  <span
+                    className='py-3 px-4 leading-4 text-green-50 font-medium text-center bg-green-400 rounded-md shadow-sm'
                   >
-                    Explore
-                  </a>
+                    Coming Soon!
+                  </span>
                 </p>
               </div>
             </div>
