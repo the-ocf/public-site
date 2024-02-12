@@ -14,7 +14,7 @@ interface InitiativeProps {
 
 export function Initiative({ title, description, cta, icon: Icon }: InitiativeProps) {
   return (
-    <div className='w-full md:w-1/3 px-4'>
+    <div className='w-full md:w-1/3 px-4 py-6'>
       <div className='h-full p-8 text-center hover:bg-coolGray-700 rounded-md hover:shadow-xl transition duration-200'>
         <div className='inline-flex h-16 w-16 mb-7 mx-auto items-center justify-center text-coolGray-900 bg-green-500 rounded-lg'>
           <Icon width={25} height={25} />
