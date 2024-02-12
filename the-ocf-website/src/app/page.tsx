@@ -13,7 +13,7 @@ import patternDark from './assets/pattern-dark.svg'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col">
+    <main id='content'>
       <section className='overflow-hidden'>
         <div
           className='relative bg-white overflow-hidden'
