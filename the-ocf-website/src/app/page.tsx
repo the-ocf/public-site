@@ -154,8 +154,11 @@ export default function Home() {
               <p className='text-base md:text-lg text-coolGray-400 font-medium lg:w-72 mb-2'>
                 The Open Construct Foundation
               </p>
-              <p className='text-base md:text-sm text-coolGray-400 lg:w-72'>
+              <p className='text-base md:text-sm text-coolGray-400 lg:w-72 mb-2'>
                 A non-profit organization that plays a pivotal role in the AWS CDK ecosystem.
+              </p>
+              <p className='text-xs md:text-xs text-coolGray-600 lg:w-72 items-center'>
+                Website developed by <a className=" underline" href="https://github.com/moltar">@moltar</a>
               </p>
             </div>
             {/* <div className='w-full md:w-1/4 lg:w-2/12 px-4 mb-16 lg:mb-0'>
