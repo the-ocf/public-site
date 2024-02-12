@@ -10,6 +10,7 @@ import { CodeSandboxLogoIcon, ChatBubbleIcon, RocketIcon } from '@radix-ui/react
 import patternWhite from './assets/pattern-white.svg'
 import patternDark from './assets/pattern-dark.svg'
 // import { TopNav } from './top-nav'
+import { Initiative } from './initiative'
 
 export default function Home() {
   return (
@@ -51,70 +52,23 @@ export default function Home() {
             </p>
           </div>
           <div className='flex flex-wrap -mx-4'>
-            <div className='w-full md:w-1/3 px-4'>
-              <div className='h-full p-8 text-center hover:bg-coolGray-700 rounded-md hover:shadow-xl transition duration-200'>
-                <div className='inline-flex h-16 w-16 mb-7 mx-auto items-center justify-center text-coolGray-900 bg-green-500 rounded-lg'>
-                  <CodeSandboxLogoIcon width={25} height={25} />
-                </div>
-                <h3 className='mb-3 text-xl md:text-2xl leading-tight text-white font-bold'>
-                  Community CDK Construct Library
-                </h3>
-                <p className='text-coolGray-400 font-medium'>
-                  Simplify cloud development with constructs.
-                  Find and use open-source Community Cloud Development Kit (CDK) construct libraries.
-                </p>
-                <p className='mt-8'>
-                  <span
-                    className='py-3 px-4 leading-4 text-green-50 font-medium text-center bg-green-400 rounded-md shadow-sm'
-                  >
-                    Coming Soon!
-                  </span>
-                </p>
-              </div>
-            </div>
-            <div className='w-full md:w-1/3 px-4'>
-              <div className='h-full p-8 text-center hover:bg-coolGray-700 rounded-md hover:shadow-xl transition duration-200'>
-                <div className='inline-flex h-16 w-16 mb-7 mx-auto items-center justify-center text-coolGray-900 bg-green-500 rounded-lg'>
-                  <ChatBubbleIcon width={25} height={25} />
-                </div>
-                <h3 className='mb-3 text-xl md:text-2xl leading-tight text-white font-bold'>
-                  Community Slack Workspace
-                </h3>
-                <p className='text-coolGray-400 font-medium'>
-                  Connect with the community of AWS CDK, CDK for Kubernetes (cdk8s) and CDK for Terraform (cdktf).
-                </p>
-                <p className='mt-8'>
-                  <a
-                    className='py-3 px-4 leading-4 text-green-50 font-medium text-center bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 rounded-md shadow-sm'
-                    href='https://www.cdk.dev/'
-                  >
-                    Join Now
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div className='w-full md:w-1/3 px-4'>
-              <div className='h-full p-8 text-center hover:bg-coolGray-700 rounded-md hover:shadow-xl transition duration-200'>
-                <div className='inline-flex h-16 w-16 mb-7 mx-auto items-center justify-center text-coolGray-900 bg-green-500 rounded-lg'>
-                  <RocketIcon width={25} height={25} />
-                </div>
-                <h3 className='mb-3 text-xl md:text-2xl leading-tight text-white font-bold'>
-                  CDK Day Conference
-                </h3>
-                <p className='text-coolGray-400 font-medium'>
-                  A small group of community members from across the globe thought this was something worth celebrating so we are going to take one day and showcase the brightest and best of CDK from across the whole product family.
-                  Let&apos;s talk serverless, kubernetes and multi cloud all in the same day!
-                </p>
-                <p className='mt-8'>
-                  <a
-                    className='inline-block py-3 px-4 leading-4 text-green-50 font-medium text-center bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 rounded-md shadow-sm'
-                    href='https://www.cdkday.com/'
-                  >
-                    Attend
-                  </a>
-                </p>
-              </div>
-            </div>
+            <Initiative
+              icon={CodeSandboxLogoIcon}
+              title="Community CDK Construct Library"
+              description="Simplify cloud development with constructs. Find and use open-source Community Cloud Development Kit (CDK) construct libraries."
+            />
+            <Initiative
+              icon={ChatBubbleIcon}
+              title="Community Slack Workspace"
+              description="Connect with the community of AWS CDK, CDK for Kubernetes (cdk8s) and CDK for Terraform (cdktf)."
+              cta={{ title: 'Join Now', url: 'https://www.cdk.dev/' }}
+            />
+            <Initiative
+              icon={RocketIcon}
+              title="CDK Day Conference"
+              description="A small group of community members from across the globe thought this was something worth celebrating so we are going to take one day and showcase the brightest and best of CDK from across the whole product family. Let&apos;s talk serverless, kubernetes and multi cloud all in the same day!"
+              cta={{ title: 'Attend', url: 'https://www.cdkday.com/' }}
+            />
           </div>
         </div>
       </section>
