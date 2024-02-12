@@ -97,7 +97,7 @@ export default function Home() {
           <div className='flex flex-wrap -mx-4'>
             <Headshot
               title={"President"}
-              name={"Thortsen Höger"}
+              name={"Thorsten Höger"}
               image={Thorsten}
               link={"https://www.linkedin.com/in/hoegertn/"}
             />
