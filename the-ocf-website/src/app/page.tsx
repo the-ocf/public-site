@@ -27,7 +27,7 @@ export default function Home() {
                   The Open Construct Foundation
                 </h1>
                 <p className='mb-8 mx-auto text-lg md:text-xl text-coolGray-500 font-medium max-w-3xl'>
-                  The Open Construct Foundation, founded in 2019, is a non-profit organization that plays a pivotal role in the AWS CDK ecosystem.
+                  The Open Construct Foundation, founded in 2019, is a non-profit organization that plays a pivotal role in the CDK ecosystem.
                 </p>
               </div>
             </div>
