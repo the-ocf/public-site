@@ -56,6 +56,7 @@ export default function Home() {
               icon={CodeSandboxLogoIcon}
               title="Community CDK Construct Library"
               description="Simplify cloud development with constructs. Find and use open-source Community Cloud Development Kit (CDK) construct libraries."
+              cta={{ title: 'Read More', url: 'https://www.open-constructs.org/' }}
             />
             <Initiative
               icon={ChatBubbleIcon}
